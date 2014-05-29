@@ -34,6 +34,12 @@ def view(request):
                       args=[language.code])
         return '<a href="%s">%s</a>' % (url, language)
 
-    return util.edit(request, 'admin/languages.html', Language,
-                     link=generate_link, form=LanguageAdminForm,
-                     exclude='description', can_delete=True)
+    return util.edit(
+                     request,
+                      'admin/languages.html',
+                     Language,
+                     link=generate_link,
+                     form=LanguageAdminForm,
+                     exclude=('description',),
+                     can_delete=True,
+                     )
