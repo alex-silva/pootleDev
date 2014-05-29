@@ -1,0 +1,6 @@
+-r build.txt
+
+django-extensions>=0.9
+glue>=0.2.8.1
+
+django-debug-toolbar>=1.2

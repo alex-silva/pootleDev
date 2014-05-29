@@ -1,0 +1,10 @@
+#!/home/grove/envs/pootleDev/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'Pootle==2.5.2-alpha1','console_scripts','pootle'
+__requires__ = 'Pootle==2.5.2-alpha1'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('Pootle==2.5.2-alpha1', 'console_scripts', 'pootle')()
+    )
