@@ -1,0 +1,140 @@
+Obs: Many of the downloads may be blocked on proxy settings. Use wifi connection instead.
+
+1. Verify python version. Must be at least 2.6
+	python -V
+2. Must have Python package manager (python-pip). To install:
+	2.1 Get "get-pip.py": https://bootstrap.pypa.io/get-pip.py
+	2.2 Run: sudo python get-pip.py
+	2.3 Run: sudo apt-get install python-pip
+3. Pootle needs a virtual environment so it can create its own dependencies without messing up system dependencies.
+	3.1 Download virtualenv: sudo pip install virtualenv
+	3.2 Create virtual environment: sudo virtualenv /var/www/pootle/env/
+	3.3 Activate virtual environment: source /var/www/pootle/env/bin/activate
+4. Install Pootle: sudo pip install Pootle. If you want to download another version, use: sudo pip install Pootle==2.5.1
+NOTE: ONLY WORKED FOR ME USING VERSION 2.5.1
+	4.1 Check version: pootle --version
+5. Initialize configuration
+	5.1 Create ~/.pootle/pootle.conf file: pootle init
+	5.2 Create default database: sudo pootle setup
+	5.3 Start pootle: sudo pootle start
+	5.4 Also run these commands:
+		pootle collectstatic --noinput
+		pootle assets build
+	5.4 Now Pootle should run on http://localhost:8000.
+	5.5 You need to change your proxy settings to listen to port 
+
+
+
+
+
+
+
+
+
+
+CREATING DEVELOPMENT ENVIRONMENT:
+
+1. It's recommended to use multiple virtual environments (to switch back and forth if needed). To do so, download virtualenvwrapper:
+	sudo pip install virtualenvwrapper
+
+2. Configure the environment:
+	export WORKON_HOME=~/envs
+	mkdir -p $WORKON_HOME
+	source /usr/local/bin/virtualenvwrapper.sh  # Or /usr/bin/virtualenvwrapper.sh
+
+Add the above lines in your ~/.bashrc file, so the environment variable is setup during initialization
+
+3. Create the virtual environment:
+
+mkvirtualenv <env-name>
+
+To activate the virtualenv, go to its directory bin(in this case, ~/envs/<envname>/bin) and activate with the command: source activate. Or just type workon <envname>
+
+To deactivate the virtualenv, just type "deactivate"
+
+4. Clone the Pootle project at https://github.com/translate/pootle. If you have a github account, it's recommended to fork the repository so you have your own repository.
+
+git clone https://github.com/translate/pootle
+OR
+git clone <yourForkRepository>
+
+OBS: Create a SSH Key for your GitHub if you haven't done so:
+https://help.github.com/articles/generating-ssh-keys
+
+5. Install required dependencies. They are in the requirements/dev.txt file:
+
+cd pootle # your local repository
+pip install -r requirements/dev.txt
+
+NOTE: YOU MAY HAVE PROBLEMS CLONING THE GIT REPOSITORY FOR THE TRANSLATE TOOLKIT. IN THAT CASE, YOU MAY CHANGE THE LAST LINE OF THE REQUIREMENTS/BASE.TXT FILE:
+
+# If you want to use Translate Toolkit 'master'
+-e git://github.com/translate/translate.git#egg=translate-toolkit
+TO
+   git+https://github.com/translate/translate.git#egg=translate-toolkit
+
+It should run setup.py in src/translate-toolkit. If it does not, run it automatically to install the python translate libraries with the command:
+python setup.py install
+
+You may also need to create the directories pootle/pootle-activity.log manually.
+You may also need to install the south module: pip install south
+You may also need to install the lxml module: pip install lxml
+	It's contains C modules, so you may need to download other packages:
+		sudo apt-get install libxml2-dev libxslt-dev
+		sudo apt-get install python-dev
+		sudo apt-get install build-dep python-lxml # It worked after this one
+You may also need to install the cssmin module: pip install cssmin
+You may also need to install the diff-match-patch module: pip install diff-match-patch
+You may also need to install the taggit module: pip install diff-match-patch
+
+You may also need to install the Django modules:
+pip install django-allauth
+pip install django-asset
+pip install django-contact-form
+pip install django-maintenancemode
+pip install django-taggit
+pip install django-voting
+pip install django-extensions
+pip install django_debug_toolbar
+
+6. You may want to change configuration for development scenarios. To do so, rename the config file:
+
+cp pootle/settings/90-dev-local.conf.sample pootle/settings/90-dev-local.conf
+
+7. Setup database schema and add initial data:
+python manage.py syncdb --noinput
+
+	NOTE: If you get an error about SOUTH_MIGRATION_MODULES, you need 
+to move the directory taggit/migrations in your python library directory to taggit/south_migrations.
+
+python manage.py migrate
+python manage.py initdb
+
+8. Now just run the server:
+python manage.py runserver
+
+9. With a development environment, you must install pootle for your environment:
+
+	Activate virtual environment: <yourVirtualEnv>/bin/activate
+	Install Pootle: pip install Pootle. If you want to download another version, use: sudo pip install Pootle==2.5.1
+	NOTE: ONLY WORKED FOR ME USING VERSION 2.5.1
+	
+	Check version: pootle --version
+5. Initialize configuration
+	5.1 Create ~/.pootle/pootle.conf file: pootle init
+	5.2 Create default database: pootle setup
+	5.3 Start pootle: pootle start
+	5.4 Also run these commands:
+		pootle collectstatic --noinput
+		pootle assets build
+	5.4 Now Pootle should run on http://localhost:8000.
+	5.5 You need to change your proxy settings to listen to port 
+
+
+LAUNCH DEVELOPMENT ENVIRONMENT
+
+1. If assets are not build, run python manage.py assets build
+
+2. Run python manage.py runserver. Also run python manage.py collectstatic --noinput --clear
+
+3. Access localhost:8000
